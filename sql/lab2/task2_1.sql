@@ -1,15 +1,13 @@
 -- Задача: Для всех рейсов Домодедово, находящихся в статусе 'Delayed', поменять статус на 'Cancelled'
 UPDATE flights
-SET
-    status = 'Cancelled'
+SET status = 'Cancelled'
 WHERE departure_airport = 'DME'
   AND status = 'Delayed'
 ;
 
 -- Обратный SQL-запрос:
 UPDATE flights
-SET
-    status = 'Delayed'
+SET status = 'Delayed'
 WHERE flight_id IN (
                     348,
                     761,
