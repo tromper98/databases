@@ -8,7 +8,11 @@ WHERE departure_airport = (SELECT
                            FROM airports_data ad_t
                            WHERE city ->> 'ru' = 'Чебоксары'
                            )
-  AND f.aircraft_code = 'SU9'
+  AND f.aircraft_code = (SELECT
+                             ad_t.aircraft_code
+                         FROM aircrafts_data ad_t
+                         WHERE model ->> 'ru' = 'Сухой Суперджет-100'
+                         )
 
 UNION ALL
 
@@ -20,4 +24,8 @@ WHERE arrival_airport = (SELECT
                          FROM airports_data ad_t
                          WHERE city ->> 'ru' = 'Чебоксары'
                          )
-  AND f.aircraft_code = 'SU9'
+  AND f.aircraft_code = (SELECT
+                             ad_t.aircraft_code
+                         FROM aircrafts_data ad_t
+                         WHERE model ->> 'ru' = 'Сухой Суперджет-100'
+                         )
