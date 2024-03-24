@@ -1,6 +1,7 @@
 -- Для билетов с кодом бронирования '58DF57' выбрать имена пассажиров, номер рейса, дату-время отправления
 -- и дату-время прибытия
-EXPLAIN (ANALYSE) SELECT
+EXPLAIN (ANALYSE)
+SELECT
     t.passenger_name,
     f.flight_no,
     f.actual_arrival,
