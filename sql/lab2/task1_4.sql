@@ -1,5 +1,6 @@
 -- Задача: Выбрать идентификаторы и стоимости 10 самых дорогостоящих бронирований (bookings)
-SELECT
+EXPLAIN (ANALYZE
+    )SELECT
     book_ref,
     total_amount
 FROM bookings
