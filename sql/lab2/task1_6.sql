@@ -7,5 +7,8 @@ FROM aircrafts_data ad
 WHERE s.fare_conditions = 'Comfort'
 -- Подумать как можно оптимизировать этот запрос
 ;
-CREATE INDEX ix_seats_fare_conditions ON seats (fare_conditions);
-DROP INDEX ix_seats_fare_conditions
+CREATE INDEX ix_seats_aircraft_code_fare_conditions ON seats (aircraft_code, fare_conditions);
+DROP INDEX ix_seats_aircraft_code_fare_conditions
+
+-- Before Index Create: 0.296 ms
+-- After Index ix_aircraft_code_fare_condition Create: : 0.089 ms

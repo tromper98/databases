@@ -1,6 +1,7 @@
 -- Выбрать номер рейса, дату-время отправления и количество свободных мест класса Эконом для перелёта
 -- из Владивостока в Москву ближайшим рейсом
 -- Следует выбирать только рейсы в состоянии 'Scheduled'
+EXPLAIN (ANALYSE )
 SELECT
     f.flight_no,
     f.status,
@@ -31,12 +32,16 @@ WHERE f.departure_airport = 'VVO'
   AND f.arrival_airport IN ('SVO', 'VKO', 'DME')
   AND f.status = 'Scheduled'
   AND s2.fare_conditions = 'Economy'
-  AND EXTRACT(EPOCH FROM (CURRENT_DATE - COALESCE(actual_departure, scheduled_departure))) = (SELECT
-                                                                                                  MIN(EXTRACT(EPOCH FROM
-                                                                                                              (CURRENT_DATE - COALESCE(actual_departure, scheduled_departure))))
-                                                                                              FROM flights f_t
-                                                                                              WHERE f_t.departure_airport = 'VVO'
-                                                                                                AND f_t.arrival_airport IN ('SVO', 'VKO', 'DME')
-                                                                                                AND f_t.status = 'Scheduled'
-                                                                                              )
+  ORDER BY (CURRENT_DATE - scheduled_departure) DESC
+LIMIT 1
 ;
+
+CREATE INDEX ix_flights_departure_airport_arrival_airport ON flights (departure_airport, arrival_airport)
+CREATE INDEX ix_seats_fare_conditions ON seats (fare_conditions)
+CREATE INDEX ix_flights_aircraft_code ON flights (aircraft_code)
+CREATE INDEX ix_flights_status ON flights (status)
+
+DROP INDEX ix_flights_departure_airport_arrival_airport
+DROP INDEX ix_seats_fare_conditions
+DROP INDEX ix_flights_aircraft_code
+DROP INDEX ix_flights_status

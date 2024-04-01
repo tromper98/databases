@@ -12,6 +12,7 @@ FROM tickets t
 WHERE t.book_ref = '58DF57'
 
 CREATE INDEX ix_tickets_book_ref ON tickets (book_ref)
+DROP INDEX ix_tickets_book_ref
 
 -- Execution Time before index create: 65.626 ms
 -- Execution Time after index create: 0.103 ms
