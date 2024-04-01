@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+PARENT_DIR=$(dirname "$(readlink -f "$0")")
+export PROJECT_DIR=$(dirname "$(dirname "$PARENT_DIR")")
+BACKUP_DIR="$PROJECT_DIR"/backup
+
+echo Unzip DB Migration
+tar -xvf "$BACKUP_DIR"/demo-medium-20170815.tar.xz -C "$BACKUP_DIR" > /dev/null
+
+docker cp "$BACKUP_DIR"/demo-medium-20170815.sql docker_postgres-db_1:/
+
+echo Start DB Init
+docker exec docker_postgres-db_1 psql -f demo-medium-20170815.sql  -U admin -d postgres > /dev/null
+echo DB Init Completed
+
+# remove migration in container
+docker exec docker_postgres-db_1 rm demo-medium-20170815.sql
+
+# remove unziped migration
+rm "$BACKUP_DIR"/demo-medium-20170815.sql
