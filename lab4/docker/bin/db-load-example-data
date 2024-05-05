@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+PARENT_DIR=$(dirname "$(readlink -f "$0")")
+export PROJECT_DIR=$(dirname "$(dirname "$PARENT_DIR")")
+DEPLOYMENT_DIR="$PROJECT_DIR"/deployment
+
+echo Copy SQL Migrations
+docker cp "$DEPLOYMENT_DIR"/add_example_data.sql docker_postgres-db_1:/
+
+echo Start Migrating
+docker exec docker_postgres-db_1 psql -f add_example_data.sql -U admin -d postgres > /dev/null
+echo Finish Migrating
+
+# remove migration in container
+docker exec docker_postgres-db_1 rm add_example_data.sql
