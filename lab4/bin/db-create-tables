@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+PARENT_DIR=$(dirname "$(readlink -f "$0")")
+export PROJECT_DIR=$(dirname "$PARENT_DIR")
+DEPLOYMENT_DIR="$PROJECT_DIR"/deployment
+
+docker cp "$DEPLOYMENT_DIR"/create_tables.sql postgres-db:/
+
+docker exec postgres-db psql -f create_tables.sql -U admin -d postgres > /dev/null
+
+# remove migration in container
+docker exec postgres-db rm create_tables.sql

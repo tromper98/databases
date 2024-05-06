@@ -4,6 +4,7 @@ services:
 
   postgres-db:
     image: postgres:16.2
+    container_name: postgres-db
     restart: always
     environment:
       POSTGRES_USER: admin
@@ -17,6 +18,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:8.3
+    container_name: pgadmin
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
@@ -28,6 +30,18 @@ services:
       - '127.0.0.1:15432:80'
     depends_on:
       - postgres-db
+
+  flask:
+    build: ./docker/flask-app
+    container_name: flask-app_1
+    environment:
+      - FLASK_ENV=development
+    restart: on-failure
+    volumes:
+      - './src:/backend'
+    ports:
+      - '127.0.0.1:5000:5000'
+    command: python main.py
 
 volumes:
   postgres-db-data:
