@@ -1,7 +1,16 @@
 -- create tables
-CREATE TABLE title (
-    title_id SERIAL PRIMARY KEY,
+CREATE TABLE job_title (
+    job_title_id SERIAL PRIMARY KEY,
     name VARCHAR(128) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TABLE department (
+    department_id SERIAL PRIMARY KEY,
+    city VARCHAR(256),
+    street VARCHAR(256),
+    house VARCHAR(256),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -18,25 +27,10 @@ CREATE TABLE employee (
     hire_date TIMESTAMP,
     note TEXT,
     image_path VARCHAR(1024),
-    title_id INTEGER NOT NULL REFERENCES title (title_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP
-);
-
-CREATE TABLE department (
-    department_id SERIAL PRIMARY KEY,
-    city VARCHAR(256),
-    street VARCHAR(256),
-    house VARCHAR(256),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP
-);
-
-CREATE TABLE employee_department (
-    employee_department_id SERIAL PRIMARY KEY,
+    job_title_id INTEGER NOT NULL REFERENCES job_title (job_title_id),
     department_id INTEGER REFERENCES department (department_id),
-    employee_id INTEGER REFERENCES employee (employee_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP
 );
 
 
@@ -53,7 +47,7 @@ $$;
 
 CREATE TRIGGER title_updated_at
   BEFORE UPDATE
-  ON title
+  ON job_title
   FOR EACH ROW
   EXECUTE PROCEDURE update_timestamp();
 
