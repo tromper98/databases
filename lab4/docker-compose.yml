@@ -37,6 +37,8 @@ services:
     environment:
       - FLASK_ENV=development
     restart: on-failure
+    env_file:
+      - ./docker/flask-app/.env
     volumes:
       - './src:/backend'
     ports:

@@ -1,18 +1,27 @@
-from flask import Flask
+from flask import Flask, render_template
+
 
 app = Flask(__name__)
 
 
 @app.route('/department/all')
 def get_all_department():
-    return """
-    <h1> All Department </h1>"""
+    return render_template('department_all.html')
 
 
-@app.route('/department/department_id=<id>')
+@app.route('/department/department_id=<int:id>')
 def get_department_by_id(id):
-    return f"""
-    <h1> Department {id}"""
+    return render_template('department.html')
+
+
+@app.route('/employee/employee_id=<int:id>')
+def get_employee_by_id(id):
+    return render_template('employee.html')
+
+
+@app.route('/')
+def redirect_to_department():
+    return get_all_department()
 
 
 if __name__ == '__main__':
