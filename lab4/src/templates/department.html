@@ -4,6 +4,15 @@
 
 {% block content %}
     <div>
-        <h1> Карточка департамента </h1>
+    <form action="/edit_department" method="post">
+        <label for="city">Город</label>
+        <input type="text" id="city" placeholder="Город" value="{{ city }}">
+
+        <label for="street">Улица</label>
+        <input type="text" id="street" placeholder="Город" value="{{ street }}">
+
+        <label for="house">Номер дома</label>
+        <input type="text" id="house" placeholder="Номер дома" value="{{ house }}">
+    </form>
     </div>
 {% endblock %}

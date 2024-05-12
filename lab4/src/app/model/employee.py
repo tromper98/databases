@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 @dataclass
-class ClientModel:
+class Employee:
     client_id: int
     first_name: str
     last_name: str
