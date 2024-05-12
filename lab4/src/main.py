@@ -1,28 +1,10 @@
-from flask import Flask, render_template
-
-
-app = Flask(__name__)
-
-
-@app.route('/department/all')
-def get_all_department():
-    return render_template('department_all.html')
-
-
-@app.route('/department/department_id=<int:id>')
-def get_department_by_id(id):
-    return render_template('department.html')
-
-
-@app.route('/employee/employee_id=<int:id>')
-def get_employee_by_id(id):
-    return render_template('employee.html')
-
-
-@app.route('/')
-def redirect_to_department():
-    return get_all_department()
+import os
+import sys
 
 
 if __name__ == '__main__':
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(script_dir)
+    sys.path.append(parent_dir)
+    from src.routes import app
     app.run(host='0.0.0.0')
