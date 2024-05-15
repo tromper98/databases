@@ -8,4 +8,4 @@ export USER_ID=$(id -u)
 
 DOCKER_COMPOSE_OPTS=(-f "$PROJECT_DIR/docker-compose.yml")
 
-(cd "$PROJECT_DIR" && docker-compose "${DOCKER_COMPOSE_OPTS[@]}" "up" "-d" "--build")
+(cd "$PROJECT_DIR" && docker-compose "${DOCKER_COMPOSE_OPTS[@]}" "up" "-d")

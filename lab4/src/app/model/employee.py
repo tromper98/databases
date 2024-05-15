@@ -5,7 +5,7 @@ from datetime import datetime
 
 @dataclass
 class Employee:
-    client_id: int
+    employee_id: int
     first_name: str
     last_name: str
     middle_name: Optional[str]

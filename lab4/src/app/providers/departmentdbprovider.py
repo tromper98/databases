@@ -52,7 +52,7 @@ class DepartmentDBProvider(DepartmentProvider):
             INSERT INTO department 
                 (city, street, house)
             VALUES
-                (%S, %S, %S)
+                (?, ?, ?)
         """
         params = (department.city, department.street, department.house)
         self._conn.execute(sql, params)
@@ -61,10 +61,10 @@ class DepartmentDBProvider(DepartmentProvider):
         sql = """
             UPDATE department
             SET
-                city = %s,
-                street = %s,
-                house = %s
-            WHERE department_id = %s
+                city = ?,
+                street = ?,
+                house = ?
+            WHERE department_id = ?
         """
         params = (department.city, department.street, department.house, department.department_id)
         self._conn.execute(sql, params)
@@ -72,7 +72,7 @@ class DepartmentDBProvider(DepartmentProvider):
     def delete_department(self, department_id: int) -> None:
         sql = """
             DELETE FROM department
-            WHERE department_id = %s
+            WHERE department_id = ?
         """
         params = (department_id,)
         self._conn.execute(sql, params)

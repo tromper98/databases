@@ -1,18 +1,34 @@
 {% extends 'base.html' %}
 
 {% block title %} Департамент {% endblock %}
+{% block css_files %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='department.css') }}">
+{% endblock %}
 
 {% block content %}
-    <div>
-    <form action="/edit_department" method="post">
-        <label for="city">Город</label>
-        <input type="text" id="city" placeholder="Город" value="{{ city }}">
+    <div class="page">
 
-        <label for="street">Улица</label>
-        <input type="text" id="street" placeholder="Город" value="{{ street }}">
+        <form class="department-attributes" action="/edit_department" method="post">
+            <label for="city">Город</label>
+            <input type="text" id="city" placeholder="Город" value="{{ city }}">
 
-        <label for="house">Номер дома</label>
-        <input type="text" id="house" placeholder="Номер дома" value="{{ house }}">
-    </form>
+            <label for="street">Улица</label>
+            <input type="text" id="street" placeholder="Город" value="{{ street }}">
+
+            <label for="house">Номер дома</label>
+            <input type="text" id="house" placeholder="Номер дома" value="{{ house }}">
+        </form>
+        <div class="employees-list">
+            Сотрудники филиала
+        </div>
+        <div class="employees">
+            {% for employee in employees %}
+            <div class="employee-item">
+                <div class="employee-item-name">{{ employee.last_name ~ ' ' ~ employee.first_name ~ ' ' ~ employee.middle_name }}</div>
+                <div class="employee-item-edit"><a href="/employee/employee_id={{ employee.employee_id }}">Edit</a></div>
+                <div class="employee-item-delete"><a href="/employee/delete/employee_id={{ employee.employee_id}}">Remove</a></div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
