@@ -32,8 +32,8 @@ class EmployeeDBProvider(EmployeeProvider):
             FROM employee
             WHERE employee_id = ?
         """
-        params = (sql,)
-        result = self._conn.execute(sql, params)
+        params = (employee_id,)
+        result = self._conn.select(sql, params)
         return self._create_employee(result)[0]
 
     def create_employee(self, employee: Employee) -> None:
@@ -46,7 +46,7 @@ class EmployeeDBProvider(EmployeeProvider):
         params = (employee.first_name, employee.last_name, employee.middle_name, employee.birth_date, employee.email,
                   employee.phone, employee.sex, employee.hire_date, employee.job_title_id, employee.department_id,
                   employee.note, employee.image_path)
-        self._conn.execute(sql, params)
+        self._conn.insert(sql, params)
 
     def update_employee(self, employee: Employee) -> None:
         sql = """
@@ -69,7 +69,7 @@ class EmployeeDBProvider(EmployeeProvider):
         params = (employee.first_name, employee.last_name, employee.middle_name, employee.birth_date, employee.email,
                   employee.phone, employee.sex, employee.hire_date, employee.job_title_id, employee.department_id,
                   employee.note, employee.image_path, employee.employee_id)
-        self._conn.execute(sql, params)
+        self._conn.update(sql, params)
 
     def delete_employee(self, employee_id: int) -> None:
         sql = """
@@ -77,7 +77,7 @@ class EmployeeDBProvider(EmployeeProvider):
             WHERE employee_id = ?
         """
         params = (employee_id,)
-        self._conn.execute(sql, params)
+        self._conn.delete(sql, params)
 
     def get_employees_by_department(self, department_id: int) -> List[Employee]:
         sql = """
@@ -99,8 +99,21 @@ class EmployeeDBProvider(EmployeeProvider):
             WHERE department_id = ?
         """
         params = (department_id,)
-        result = self._conn.execute(sql, params)
+        result = self._conn.select(sql, params)
         return self._create_employee(result)
+
+    def is_employee_exists(self, employee_id: int) -> bool:
+        sql = """
+            SELECT 
+                1
+            FROM employee
+            WHERE employee_id = ?
+        """
+        params = (employee_id,)
+        result = self._conn.select(sql, params)
+        if result is not None:
+            return True
+        return False
 
     @staticmethod
     def _create_employee(rows: List[Row]) -> List[Employee]:

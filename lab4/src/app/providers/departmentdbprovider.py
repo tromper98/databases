@@ -30,7 +30,7 @@ class DepartmentDBProvider(DepartmentProvider):
                 d.house
         """
         params = (department_id,)
-        result = self._conn.execute(sql, params)
+        result = self._conn.select(sql, params)
         return self._create_departments(result)[0]
 
     def get_departments(self) -> List[Department]:
@@ -44,7 +44,7 @@ class DepartmentDBProvider(DepartmentProvider):
             FROM department d
                 LEFT JOIN employee e ON d.department_id = e.department_id
         """
-        result = self._conn.execute(sql)
+        result = self._conn.select(sql)
         return self._create_departments(result)
 
     def create_department(self, department: Department) -> None:
@@ -55,7 +55,7 @@ class DepartmentDBProvider(DepartmentProvider):
                 (?, ?, ?)
         """
         params = (department.city, department.street, department.house)
-        self._conn.execute(sql, params)
+        self._conn.insert(sql, params)
 
     def update_department(self, department: Department) -> None:
         sql = """
@@ -67,7 +67,7 @@ class DepartmentDBProvider(DepartmentProvider):
             WHERE department_id = ?
         """
         params = (department.city, department.street, department.house, department.department_id)
-        self._conn.execute(sql, params)
+        self._conn.update(sql, params)
 
     def delete_department(self, department_id: int) -> None:
         sql = """
@@ -75,7 +75,7 @@ class DepartmentDBProvider(DepartmentProvider):
             WHERE department_id = ?
         """
         params = (department_id,)
-        self._conn.execute(sql, params)
+        self._conn.delete(sql, params)
 
     @staticmethod
     def _create_departments(rows: List[Row]) -> List[Department]:

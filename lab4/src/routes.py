@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 
 from src.app.departmentservice import DepartmentService
 from src.app.employeeservice import EmployeeService
@@ -24,6 +24,13 @@ def get_department_by_id(department_id: int):
     context = department.to_dict()
     context['employees'] = employees
     return render_template('department.html', **context)
+
+
+@app.route('/department/delete_employee/<int:employee_id>', methods=['DELETE'])
+def delete_employee_from_department(employee_id: int):
+    service = EmployeeService(EmployeeDBProvider())
+    service.remove_employee_from_department(employee_id)
+    return redirect_to_department()
 
 
 @app.route('/employee/employee_id=<int:id>')

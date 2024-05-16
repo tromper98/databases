@@ -26,7 +26,11 @@
             <div class="employee-item">
                 <div class="employee-item-name">{{ employee.last_name ~ ' ' ~ employee.first_name ~ ' ' ~ employee.middle_name }}</div>
                 <div class="employee-item-edit"><a href="/employee/employee_id={{ employee.employee_id }}">Edit</a></div>
-                <div class="employee-item-delete"><a href="/employee/delete/employee_id={{ employee.employee_id}}">Remove</a></div>
+                <div class="employee-item-delete">
+                    <form method="DELETE">
+                        <a href="/department/delete_employee/{{ employee.employee_id}}">Remove</a>
+                    </form>
+                </div>
             </div>
             {% endfor %}
         </div>
