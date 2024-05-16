@@ -1,9 +1,27 @@
 {% extends 'base.html' %}
 
 {% block title %} Список филиалов {% endblock %}
-
+{% block css_files %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='department_all.css') }}">
+{% endblock %}
 {% block content %}
-    <div>
-        <h1> Список всех департаментов </h1>
+    <div class="page">
+        <div class="department-title">
+            <div class="department-title-department-list">Адрес филиала</div>
+            <div class="department-title-department-employees">Число сотрудников</div>
+            <div class="department-title-department-edit">Редактировать</div>
+            <div class="department-title-department-delete">Удалить</div>
+        </div>
+        <div class="department-list">
+            {% for department in departments %}
+                <div class="department-item">
+                    <div class="department-item-address">{{ department.city ~ ' ул.' ~ department.address ~ ' д.' ~ department.house }}</div>
+                    <div class="department-item-employees">{{ department.employee_count }}</div>
+                    <div class="department-item-edit"><a href="/department/department_id={{ department.department_id}}">Edit</a></div>
+                    <div class="department-item-delete"><a href="/department/delete/department_id={{ department.department_id }}">Remove</a></div>
+                </div>
+
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

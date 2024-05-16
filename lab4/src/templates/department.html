@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Департамент {% endblock %}
+{% block title %} Карточка филиала {% endblock %}
 {% block css_files %}
         <link rel="stylesheet" href="{{ url_for('static', filename='department.css') }}">
 {% endblock %}
@@ -28,7 +28,7 @@
                 <div class="employee-item-edit"><a href="/employee/employee_id={{ employee.employee_id }}">Edit</a></div>
                 <div class="employee-item-delete">
                     <form method="DELETE">
-                        <a href="/department/delete_employee/{{ employee.employee_id}}">Remove</a>
+                        <a href="/department/delete_employee/employee_id={{ employee.employee_id}}">Remove</a>
                     </form>
                 </div>
             </div>

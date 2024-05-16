@@ -12,6 +12,20 @@ class DepartmentDBProvider(DepartmentProvider):
     def __init__(self):
         self._conn = DbConnection(os.environ.get('POSTGRES_CONN_STR'))
 
+    def is_department_exists(self, department_id: int) -> bool:
+        sql = f"""
+            SELECT 
+                1
+            FROM department
+            WHERE department_id = ?
+        """
+
+        params = (department_id,)
+        result = self._conn.select(sql, params)
+        if result is not None:
+            return True
+        return False
+
     def get_department_by_id(self, department_id: int) -> Department:
         sql = """
             SELECT 
@@ -43,6 +57,11 @@ class DepartmentDBProvider(DepartmentProvider):
                 COUNT(DISTINCT e.employee_id) AS employee_count
             FROM department d
                 LEFT JOIN employee e ON d.department_id = e.department_id
+            GROUP BY
+                d.department_id,
+                d.city,
+                d.street,
+                d.house
         """
         result = self._conn.select(sql)
         return self._create_departments(result)
