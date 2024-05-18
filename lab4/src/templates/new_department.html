@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} Создание филиала {% endblock %}
+{% block css_files %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='department.css') }}">
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="page">
+        <div class="department-name">
+            Карточка департамента
+        </div>
+        <form class="department-attributes" action="/department/create" method="POST">
+            <label for="city">Город</label>
+            <input type="text" id="city" name="city" placeholder="Город">
+
+            <label for="street">Улица</label>
+            <input type="text" id="street" name="street" placeholder="Город">
+
+            <label for="house">Номер дома</label>
+            <input type="text" id="house" name="house" placeholder="Номер дома">
+            <input type="hidden" name="department_id">
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+{% endblock %}

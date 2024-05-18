@@ -4,7 +4,7 @@ from dataclasses import dataclass, asdict
 
 @dataclass
 class Department:
-    department_id: int
+    department_id: Optional[int]
     city: str
     street: str
     house: str
@@ -15,4 +15,8 @@ class Department:
 
     @staticmethod
     def from_dict(dt: Dict):
-        return Department(department_id=dt['department_id'], city=dt['city'], street=dt['street'], house=dt['house'])
+        if 'department_id' in dt.keys():
+            department_id = dt['department_id']
+        else:
+            department_id = None
+        return Department(department_id=department_id, city=dt['city'], street=dt['street'], house=dt['house'])
