@@ -3,5 +3,26 @@ body {
 }
 
 .content-container {
-    margin: 10% 15%;
+    margin: 2% 10%;
+}
+
+.navbar {
+    display: inline-block;
+    padding: 5em;
+}
+
+.navbar-item {
+    display: inline-block
+}
+
+button[type="submit"] {
+    padding: 1em;
+    max-width: 150px;
+    min-width: 150px;
+    align-self: center;
+    justify-self: center;
+    grid-column-start: 2;
+    grid-column-end: 2;
+    border-radius: 12px;
+    background-color: #B0C4DE;
 }

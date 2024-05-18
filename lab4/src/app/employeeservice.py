@@ -26,7 +26,6 @@ class EmployeeProvider:
 
 class EmployeeService:
     _provider: EmployeeProvider
-    _client: Employee
 
     def __init__(self, provider: EmployeeProvider) -> None:
         self._provider = provider
@@ -40,11 +39,11 @@ class EmployeeService:
         return employees
 
     def remove_employee_from_department(self, employee_id: int) -> None:
-        employee = self._get_employee(employee_id)
+        employee = self.get_employee(employee_id)
         employee.department_id = None
         self._save_employee(employee)
 
-    def _get_employee(self, employee_id: int) -> Employee:
+    def get_employee(self, employee_id: int) -> Employee:
         if self._provider.is_employee_exists(employee_id):
             return self._provider.get_employee_by_id(employee_id)
         else:

@@ -9,6 +9,14 @@
     grid-row-gap: 2em;
 }
 
+.department-name {
+    display: grid;
+    grid-template-rows: 1fr;
+    text-align: center;
+    margin: 1em 2em 1em;
+    font-size: 2rem
+}
+
 .department-attributes label {
     align: right;
     width: 100%;
@@ -41,7 +49,7 @@
     display: grid;
     grid-template-rows: 1fr;
     text-align: center;
-    margin: 3em;
+    margin: 3em 2em 1em;
     font-size: 2rem;
 }
 

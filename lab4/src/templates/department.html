@@ -5,18 +5,24 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='department.css') }}">
 {% endblock %}
 
+
+
 {% block content %}
     <div class="page">
-
-        <form class="department-attributes" action="/edit_department" method="post">
+        <div class="department-name">
+            Карточка департамента
+        </div>
+        <form class="department-attributes" action="/department/update" method="POST">
             <label for="city">Город</label>
-            <input type="text" id="city" placeholder="Город" value="{{ city }}">
+            <input type="text" id="city" name="city" placeholder="Город" value="{{ department.city }}">
 
             <label for="street">Улица</label>
-            <input type="text" id="street" placeholder="Город" value="{{ street }}">
+            <input type="text" id="street" name="street" placeholder="Город" value="{{ department.street }}">
 
             <label for="house">Номер дома</label>
-            <input type="text" id="house" placeholder="Номер дома" value="{{ house }}">
+            <input type="text" id="house" name="house" placeholder="Номер дома" value="{{ department.house }}">
+            <input type="hidden" name="department_id" value="{{ department.department_id }}">
+            <button type="submit">Сохранить</button>
         </form>
         <div class="employees-list">
             Сотрудники филиала
@@ -27,7 +33,7 @@
                 <div class="employee-item-name">{{ employee.last_name ~ ' ' ~ employee.first_name ~ ' ' ~ employee.middle_name }}</div>
                 <div class="employee-item-edit"><a href="/employee/employee_id={{ employee.employee_id }}">Edit</a></div>
                 <div class="employee-item-delete">
-                    <form method="DELETE">
+                    <form method="POST">
                         <a href="/department/delete_employee/employee_id={{ employee.employee_id}}">Remove</a>
                     </form>
                 </div>

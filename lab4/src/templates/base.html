@@ -8,6 +8,30 @@
     {% block css_files %}{% endblock %}
 </head>
 <body>
+    <div class="header">
+        <div class="navbar">
+            <div class="navbar-item">
+                <a href="/department/all">Филиалы</a>
+            </div>
+            {% if department is defined %}
+                <div class="navbar-item"> > </div>
+                <div class="navbar-item">
+                    <a href="/department/department_id={{ department.department_id }}">
+                        {{ department.city ~ ' ул.' ~ department.address ~ ' д.' ~ department.house }}
+                    </a>
+                </div>
+            {% endif %}
+            {% if employee is defined %}
+                <div class="navbar-item"> > </div>
+                <div class="navbar-item">
+                    >
+                    <a href="employee/employee_id={{ employee.employee_id }}">
+                        {{ employee.last_name ~ ' ' ~ employee.first_name ~ ' ' ~ employee.middle_name }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
     <div class="content-container">
         {% block content %}
         {% endblock %}
