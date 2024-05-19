@@ -13,20 +13,20 @@
             <div class="navbar-item">
                 <a href="/department/all">Филиалы</a>
             </div>
-            {% if department is defined %}
+            {% if navbar_department is defined %}
                 <div class="navbar-item"> > </div>
                 <div class="navbar-item">
-                    <a href="/department/department_id={{ department.department_id }}">
-                        {{ department.city ~ ' ул.' ~ department.address ~ ' д.' ~ department.house }}
+                    <a href="/department/department_id={{ navbar_department.department_id }}">
+                        {{ navbar_department.city ~ ' ул.' ~ navbar_department.address ~ ' д.' ~ navbar_department.house }}
                     </a>
                 </div>
             {% endif %}
-            {% if employee is defined %}
+            {% if navbar_employee is defined %}
                 <div class="navbar-item"> > </div>
                 <div class="navbar-item">
                     >
-                    <a href="employee/employee_id={{ employee.employee_id }}">
-                        {{ employee.last_name ~ ' ' ~ employee.first_name ~ ' ' ~ employee.middle_name }}
+                    <a href="employee/employee_id={{ navbar_employee.employee_id }}">
+                        {{ navbar_employee.last_name ~ ' ' ~ navbar_employee.first_name ~ ' ' ~ navbar_employee.middle_name }}
                     </a>
                 </div>
             {% endif %}

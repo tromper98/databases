@@ -34,7 +34,7 @@ class EmployeeDBProvider(EmployeeProvider):
         """
         params = (employee_id,)
         result = self._conn.select(sql, params)
-        return self._create_employee(result)[0]
+        return Employee.from_query_result(result[0])
 
     def create_employee(self, employee: Employee) -> None:
         sql = """
@@ -100,7 +100,7 @@ class EmployeeDBProvider(EmployeeProvider):
         """
         params = (department_id,)
         result = self._conn.select(sql, params)
-        return self._create_employee(result)
+        return [Employee.from_query_result(row) for row in result]
 
     def is_employee_exists(self, employee_id: int) -> bool:
         sql = """
@@ -114,25 +114,3 @@ class EmployeeDBProvider(EmployeeProvider):
         if result is not None:
             return True
         return False
-
-    @staticmethod
-    def _create_employee(rows: List[Row]) -> List[Employee]:
-        models = []
-        for row in rows:
-            employee = Employee(
-                employee_id=row.employee_id,
-                first_name=row.first_name,
-                last_name=row.last_name,
-                middle_name=row.middle_name,
-                birth_date=row.birth_date,
-                email=row.email,
-                phone=row.phone,
-                sex=row.sex,
-                hire_date=row.hire_date,
-                job_title_id=row.job_title_id,
-                department_id=row.department_id,
-                note=row.note,
-                image_path=row.image_path
-            )
-            models.append(employee)
-        return models

@@ -1,0 +1,180 @@
+.employee-title {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    text-align: center;
+    margin: 1em 2em 1em;
+    font-size: 2rem
+}
+
+.personal-data {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 2fr;
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+.avatar {
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 5;
+}
+
+.employee-data {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 2fr;
+    grid-row-start: 2;
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+.contact-data {
+   display: grid;
+   grid-template-columns: 1fr 2fr 2fr 2fr;
+   grid-row-start: 3;
+   grid-column-start: 1;
+   grid-column-end: 5
+}
+
+.notes {
+    display: grid;
+    grid-row-start: 4;
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+.submit-container {
+   display: grid;
+   grid-template-columns: 1fr 2fr 2fr 2fr;
+}
+
+.employee-attributes label {
+    display: grid;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    margin: 1em;
+    text-align: right;
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.employee-attributes input {
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+    margin: 1em;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.employee-attributes select {
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+    margin: 1em;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.personal-data input[type=text] {
+    grid-column-start: 2;
+    grid-column-end: 2;
+}
+
+.personal-data input[type=date] {
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 4;
+    grid-row-end: 4;
+}
+
+.personal-data input[type=radio] {
+    display: inline;
+    width: auto;
+}
+
+.personal-data .radio-button-label {
+    display: inline;
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.personal-data .sex-label {
+    display: grid;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    text-align: right;
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.personal-data .sex-radio-buttons {
+    display: inline-block;
+    grid-column-start: 2;
+    grid-column-end: 2;
+
+}
+
+.personal-data input[type=file] {
+    display: grid:
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 4;
+}
+
+.employee-data input[type=date] {
+    grid-column-start: 2;
+    grid-column-end: 4;
+
+}
+
+.employee-data select {
+    display: grid;
+    grid-column-start: 2;
+    grid-column-end: 4;
+}
+
+.contact-data input {
+    display: grid;
+    grid-column-start: 2;
+    grid-column-end: 4;
+}
+
+textarea {
+    display: grid;
+    grid-column-start: 1;
+    grid-column-end: 5;
+    margin: 1em 5em 1em;
+}
+
+button[type=submit] {
+    grid-row-start: 5;
+    grid-column-start: 4;
+    grid-column-end: 5;
+}
+
+.avatar label {
+    text-align: center;
+}
+
+.avatar input[type=file] {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}

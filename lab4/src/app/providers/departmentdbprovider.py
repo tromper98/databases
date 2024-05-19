@@ -45,7 +45,7 @@ class DepartmentDBProvider(DepartmentProvider):
         """
         params = (department_id,)
         result = self._conn.select(sql, params)
-        return self._create_departments(result)[0]
+        return Department.from_query_result(result[0])
 
     def get_departments(self) -> List[Department]:
         sql = """
@@ -64,7 +64,7 @@ class DepartmentDBProvider(DepartmentProvider):
                 d.house
         """
         result = self._conn.select(sql)
-        return self._create_departments(result)
+        return [Department.from_query_result(row) for row in result]
 
     def create_department(self, department: Department) -> None:
         sql = """
@@ -95,17 +95,3 @@ class DepartmentDBProvider(DepartmentProvider):
         """
         params = (department_id,)
         self._conn.delete(sql, params)
-
-    @staticmethod
-    def _create_departments(rows: List[Row]) -> List[Department]:
-        models = []
-        for row in rows:
-            department = Department(
-                department_id=row.department_id,
-                city=row.city,
-                street=row.street,
-                house=row.house,
-                employee_count=row.employee_count
-            )
-            models.append(department)
-        return models

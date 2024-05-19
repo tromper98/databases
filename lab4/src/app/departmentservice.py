@@ -46,8 +46,7 @@ class DepartmentService:
 
     def update_department(self, new_department_data: Department) -> None:
         if self._provider.is_department_exists(new_department_data.department_id):
-            model = new_department_data
-            self._provider.update_department(model)
+            self._provider.update_department(new_department_data)
         else:
             raise ValueError(f'Department with department_id = {new_department_data.department_id} does not found')
 

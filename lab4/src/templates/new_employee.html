@@ -12,32 +12,30 @@
             Личные данные
         </div>
 
-        <form class="employee-attributes" action="/employee/update" method="POST">
+        <form class="employee-attributes" action="/employee/create" method="POST">
             <div class="personal-data">
-                <input type="hidden" id="employee_id" name="employee_id" value="{{ employee.employee_id }}">
-
                 <label for="first_name">Имя</label>
-                <input type="text" id="first_name" name="first_name" placeholder="Имя" value="{{ employee.first_name }}">
+                <input type="text" id="first_name" name="first_name" placeholder="Имя">
 
                 <label for="last_name">Фамилия</label>
-                <input type="text" id="last_name" name="last_name" placeholder="Фамилия" value="{{ employee.last_name }}">
+                <input type="text" id="last_name" name="last_name" placeholder="Фамилия">
 
                 <label for="middle_name">Отчество</label>
-                <input type="text" id="middle_name" name="middle_name" placeholder="Отчество" value="{{ employee.middle_name }}">
+                <input type="text" id="middle_name" name="middle_name" placeholder="Отчество">
 
                 <label for="birth_date">Дата рождения</label>
-                <input type="date" id="birth_date" name="birth_date" value="{{ employee.birth_date }}">
+                <input type="date" id="birth_date" name="birth_date">
 
                 <div class="sex-label">
                     Пол
                 </div>
                 <div class="sex-radio-buttons">
                     <label class="radio-button-label" for="radio-m">М</label>
-                    <input type="radio" id="radio-m" name="sex" value="M" {{ 'checked' if employee.sex == 'M' }}>
+                    <input type="radio" id="radio-m" name="sex" value="M">
 
 
                     <label class="radio-button-label" for="radio-w">Ж</label>
-                    <input type="radio" id="radio-w" name="sex" value="F" {{ 'checked' if employee.sex == 'F' }}>
+                    <input type="radio" id="radio-w" name="sex" value="F">
                 </div>
 
                 <div class="avatar">
@@ -52,23 +50,19 @@
                 </div>
 
                 <label for="hire_date">Дата найма</label>
-                <input type="date" id="hire_date" name="hire_date" value="{{ employee.hire_date }}">
+                <input type="date" id="hire_date" name="hire_date">
 
                 <label for="job_title_id">Должность</label>
                 <select id="job_title_id" name="job_title_id">
                     {% for job_title in job_titles %}
-                        {% if employee.job_title_id == job_title.job_title_id %}
-                            <option value="{{ job_title.job_title_id }}" selected>{{ job_title.name }}</option>
-                        {% else %}
-                            <option value="{{ job_title.job_title_id }}">{{ job_title.name }}</option>
-                        {% endif  %}
+                        <option value="{{ job_title.job_title_id }}">{{ job_title.name }}</option>
                     {% endfor %}
                 </select>
 
                 <label for="department_id">Филиал</label>
                 <select id="department_id" name="department_id">
                     {% for department in departments %}
-                        {% if employee.department_id == department.department_id %}
+                        {% if source_department.department_id == department.department_id %}
                             <option value="{{ department.department_id }}" selected>{{ department.city ~ ' ул.' ~ department.address ~ ' д.' ~ department.house }}</option>
                         {% else %}
                             <option value="{{ department.department_id}}">{{ department.city ~ ' ул.' ~ department.address ~ ' д.' ~ department.house }}</option>
@@ -83,11 +77,10 @@
                 </div>
 
                 <label for="email">Email</label>
-                <input type="text" id="email" name="email" value="{{ employee.email }}">
+                <input type="text" id="email" name="email">
 
                 <label for="phone">Телефон</label>
-                <input type="tel" id="phone" name="phone" value="{{ employee.phone }}"
-                       pattern="\+7\-[0-9]{3}\-[0-9]{3}\-[0-9]{2}\-[0-9]{2}">
+                <input type="tel" id="phone" name="phone" pattern="\+7\-[0-9]{3}\-[0-9]{3}\-[0-9]{2}\-[0-9]{2}">
 
             </div>
 
@@ -96,12 +89,11 @@
                     Заметки
                 </div>
 
-                <textarea id="note" name="note" placeholder="Заметки о сотруднике" rows="10">{{ employee.note }}
-                </textarea>
+                <textarea id="note" name="note" placeholder="Заметки о сотруднике" rows="10"></textarea>
             </div>
 
             <div class="submit-container">
-                <button type="submit">Сохранить</button>
+                <button type="submit">Создать</button>
             </div>
         </form>
 

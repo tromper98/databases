@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %} Карточка филиала {% endblock %}
+{% block title %} Филиал {% endblock %}
 {% block css_files %}
         <link rel="stylesheet" href="{{ url_for('static', filename='department.css') }}">
 {% endblock %}
-
-
 
 {% block content %}
     <div class="page">
@@ -33,12 +31,20 @@
                 <div class="employee-item-name">{{ employee.last_name ~ ' ' ~ employee.first_name ~ ' ' ~ employee.middle_name }}</div>
                 <div class="employee-item-edit"><a href="/employee/employee_id={{ employee.employee_id }}">Edit</a></div>
                 <div class="employee-item-delete">
-                    <form method="POST">
-                        <a href="/department/delete_employee/employee_id={{ employee.employee_id}}">Remove</a>
-                    </form>
+                    <a href="/employee/delete/employee_id={{ employee.employee_id}}">Remove</a>
                 </div>
             </div>
             {% endfor %}
+
+            <div class="employee-item">
+                <form class="new-employee" action="/employee/new" method="POST">
+                    <input type="hidden" name="department_id" value="{{ department.department_id }}">
+                    <button type="submit">Добавить сотрудника</button>
+                </form>
+            </div>
         </div>
+
+
+
     </div>
 {% endblock %}
