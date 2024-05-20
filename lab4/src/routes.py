@@ -65,7 +65,7 @@ def delete_department(department_id: int):
 
     employees = employee_service.get_employees_from_department(department_id)
     for employee in employees:
-        employee_service.remove_employee_from_department(employee.employee_id)
+        employee_service.delete_employee(employee.employee_id)
 
     department_service.delete_department(department_id)
     return redirect('/department/all', code=302)

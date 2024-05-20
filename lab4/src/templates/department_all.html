@@ -15,7 +15,7 @@
         <div class="department-list">
             {% for department in departments %}
                 <div class="department-item">
-                    <div class="department-item-address">{{ department.city ~ ' ул.' ~ department.address ~ ' д.' ~ department.house }}</div>
+                    <div class="department-item-address">{{ department.city ~ ' ул.' ~ department.street ~ ' д.' ~ department.house }}</div>
                     <div class="department-item-employees">{{ department.employee_count }}</div>
                     <div class="department-item-edit"><a href="/department/department_id={{ department.department_id}}">Edit</a></div>
                     <div class="department-item-delete"><a href="/department/delete/department_id={{ department.department_id }}">Remove</a></div>

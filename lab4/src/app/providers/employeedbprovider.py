@@ -111,6 +111,6 @@ class EmployeeDBProvider(EmployeeProvider):
         """
         params = (employee_id,)
         result = self._conn.select(sql, params)
-        if result is not None:
+        if len(result) > 0:
             return True
         return False
