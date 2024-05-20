@@ -133,4 +133,4 @@ def delete_employee(employee_id: int):
 
 @app.route('/')
 def redirect_to_department_list():
-    return get_all_department()
+    return redirect(f'/department/all', code=302)
