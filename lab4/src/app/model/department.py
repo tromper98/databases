@@ -6,6 +6,10 @@ from dataclasses import dataclass, asdict
 from pyodbc import Row
 
 
+# TODO
+# 1. Модель не должна хранить те, данные, которые она не
+# 2. Превратить DTO в модель Department, реализовать операции обновления состояния модели в классе
+
 @dataclass
 class Department:
     department_id: Optional[int]

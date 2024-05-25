@@ -26,7 +26,6 @@ class DepartmentProvider:
 
 class DepartmentService:
     _provider: DepartmentProvider
-    _models: List[Department]
 
     def __init__(self, provider: DepartmentProvider) -> None:
         self._provider = provider

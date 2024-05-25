@@ -7,6 +7,7 @@ from src.app.model.department import Department
 from src.app.common.dbconnection import DbConnection
 
 
+# TODO Назвать по другому - DepartmentTable, DepartmentTableGateway
 class DepartmentDBProvider(DepartmentProvider):
 
     def __init__(self):
@@ -17,7 +18,7 @@ class DepartmentDBProvider(DepartmentProvider):
             SELECT 
                 1
             FROM department
-            WHERE department_id = ?
+            WHERE department_id = ?  
         """
 
         params = (department_id,)
