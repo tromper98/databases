@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+PARENT_DIR=$(dirname "$(readlink -f "$0")")
+export PROJECT_DIR=$(dirname "$PARENT_DIR")
+export USER_ID=$(id -u)
+
+DOCKER_COMPOSE_OPTS=(-f "$PROJECT_DIR/docker/tests/docker-compose.yml")
+
+(cd "$PROJECT_DIR" && docker-compose "${DOCKER_COMPOSE_OPTS[@]}" "up" "-d" "--build")

@@ -34,7 +34,6 @@ services:
     container_name: flask-app_1
     environment:
       - FLASK_ENV=development
-      - PYTHONPATH=/src
     restart: on-failure
     env_file:
       - ./docker/flask-app/.env
