@@ -37,7 +37,7 @@
             {% endfor %}
 
             <div class="employee-item">
-                <form class="new-employee" action="/employee/new" method="POST">
+                <form class="new-employee" action="/employee/new" method="GET">
                     <input type="hidden" name="department_id" value="{{ department.department_id }}">
                     <button type="submit">Добавить сотрудника</button>
                 </form>

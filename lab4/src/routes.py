@@ -1,138 +1,147 @@
 from flask import Flask, render_template, request, redirect
 
 
-from src.app.model import *
-from src.app import DepartmentService, EmployeeService, JobTitleService
-from src.app.providers.departmentdbprovider import DepartmentDBProvider
-from src.app.providers.employeedbprovider import EmployeeDBProvider
-from src.app.providers.jobtitledbprovider import JobTitleDBProvider
+from src.app.common.transfer.employeedto import EmployeeDTO
+from src.app.common.transfer.departmentdto import DepartmentDTO
+
+from src.app.database.repository import EmployeeRepository, DepartmentRepository
+from src.app.database.model import Employee, Department
+from src.app.database.providers.jobtitledbprovider import JobTitleDBProvider
 
 app = Flask(__name__)
 
 
 # TODO проверить HTTP методы
 
-@app.route('/department/all', methods=['GET'])
+@app.route('/department/all')
 def get_all_department():
-    service = DepartmentService(DepartmentDBProvider())
-    departments = service.get_departments()
+    repository = DepartmentRepository()
+    departments = repository.find_all()
 
-    context = dict()
-    context['departments'] = departments
+    dto_list = []
+    for department in departments:
+        dto_list.append(DepartmentDTO(
+            department_id=department.department_id,
+            city=department.city,
+            street=department.street,
+            house=department.house,
+            employee_count=repository.get_employee_count(department.department_id)
+        ))
+
+    context = dict(
+        departments=dto_list
+    )
     return render_template('department_all.html', **context)
 
 
-@app.route('/department/department_id=<int:department_id>', methods=['GET'])
+@app.route('/department/department_id=<int:department_id>', )
 def get_department_by_id(department_id: int):
-    department_service = DepartmentService(DepartmentDBProvider())
-    employee_service = EmployeeService(EmployeeDBProvider())
+    department_repository = DepartmentRepository()
+    employee_repository = EmployeeRepository()
 
-    department = department_service.get_department_by_id(department_id)
-    employees = employee_service.get_employees_from_department(department.department_id)
+    department = department_repository.find(department_id)
+    employees = employee_repository.find_by_department_id(department.department_id)
 
-
-    #TODO словарь лучше задавать внутри dict()
-    context = dict()
-    context['navbar_department'] = department
-    context['department'] = department
-    context['employees'] = employees
+    context = dict(
+        navbar_department=department,
+        department=department,
+        employees=employees
+    )
     return render_template('department.html', **context)
 
 
-@app.route('/department/new', methods=['GET', ])
+@app.route('/department/new')
 def new_department():
     return render_template('new_department.html')
 
 
 @app.route('/department/create', methods=['POST'])
 def create_department():
-    if request.method == 'POST':
-        service = DepartmentService(DepartmentDBProvider())
-        dp = Department.from_dict(request.form)
-        service.create_department(dp)
-        return redirect('/department/all', code=302)
+    dto = DepartmentDTO.from_dict(request.form)
+    department = Department(dto.city, dto.street, dto.house)
+
+    repository = DepartmentRepository()
+    repository.store(department)
+    return redirect('/department/all', code=302)
 
 
 @app.route('/department/update', methods=['POST'])
 def update_department():
-    if request.method == 'POST':
-        dp: Department = Department.from_dict(request.form)
-        service = DepartmentService(DepartmentDBProvider())
-        service.update_department(dp)
-        return redirect(f'/department/department_id={dp.department_id}', code=302)
+    dto = DepartmentDTO.from_dict(request.form)
+    repository = DepartmentRepository()
+    department = repository.find(dto.department_id)
+    department.edit(dto)
+    repository.store(department)
+    return redirect(f'/department/department_id={department.department_id}', code=302)
 
 
-@app.route('/department/delete/department_id=<int:department_id>', methods=['GET', 'DELETE'])
+@app.route('/department/delete/department_id=<int:department_id>', methods=['GET'])
 def delete_department(department_id: int):
-    department_service = DepartmentService(DepartmentDBProvider())
-    employee_service = EmployeeService(EmployeeDBProvider())
-
-    employees = employee_service.get_employees_from_department(department_id)
-    for employee in employees:
-        employee_service.delete_employee(employee.employee_id)
-
-    department_service.delete_department(department_id)
+    repository = DepartmentRepository()
+    repository.remove(department_id)
     return redirect('/department/all', code=302)
 
 
 @app.route('/employee/employee_id=<int:employee_id>')
 def get_employee_by_id(employee_id: int):
-    employee_service = EmployeeService(EmployeeDBProvider())
-    job_title_service = JobTitleService(JobTitleDBProvider())
-    department_service = DepartmentService(DepartmentDBProvider())
+    employee_repository = EmployeeRepository()
+    department_repository = DepartmentRepository()
+    job_title_provider = JobTitleDBProvider()
 
-    context = dict()
-    employee = employee_service.get_employee(employee_id)
+    employee = employee_repository.find(employee_id)
 
-    context['navbar_employee'] = employee
-    context['navbar_department'] = department_service.get_department_by_id(employee.department_id)
-    context['employee'] = employee
-    context['departments'] = department_service.get_departments()
-    context['job_titles'] = job_title_service.get_job_titles()
+    context = dict(
+        navbar_employee=employee,
+        navbar_department=department_repository.find(employee.department_id),
+        employee=employee,
+        departments=department_repository.find_all(),
+        job_titles=job_title_provider.find_all()
+    )
     return render_template('employee.html', **context)
 
 
-@app.route('/employee/new', methods=['GET', 'POST'])
+@app.route('/employee/new')
 def new_employee():
-    context = dict()
-    department_service = DepartmentService(DepartmentDBProvider())
-    job_title_service = JobTitleService(JobTitleDBProvider())
-    if request.method == 'POST' and 'department_id' in request.form.keys():
-        dp = department_service.get_department_by_id(int(request.form['department_id']))
+    department_repository = DepartmentRepository()
+    job_title_provider = JobTitleDBProvider()
 
-        context['navbar_department'] = dp
-        context['source_department'] = dp
-
-    context['departments'] = department_service.get_departments()
-    context['job_titles'] = job_title_service.get_job_titles()
-
+    dp = department_repository.find(int(request.form['department_id']))
+    context = dict(
+        navbar_department=dp,
+        source_department=dp,
+        departments=department_repository.find_all(),
+        job_titles=job_title_provider.find_all()
+    )
     return render_template('new_employee.html', **context)
 
 
 @app.route('/employee/create', methods=['POST'])
 def create_employee():
-    if request.method == 'POST':
-        service = EmployeeService(EmployeeDBProvider())
-        emp = Employee.from_dict(request.form)
-        service.create_employee(emp)
-        return redirect(f'/department/department_id={emp.department_id}', code=302)
+    dto = EmployeeDTO.from_dict(request.form)
+    employee = Employee.from_dto(dto)
+    repository = EmployeeRepository()
+    repository.store(employee)
+    return redirect(f'/department/department_id={employee.department_id}', code=302)
 
 
 @app.route('/employee/update', methods=['POST'])
 def update_employee():
-    if request.method == 'POST':
-        emp: Employee = Employee.from_dict(request.form)
-        service = EmployeeService(EmployeeDBProvider())
-        service.update_employee(emp)
-        return redirect(f'/employee/employee_id={emp.employee_id}', code=302)
+    repository = EmployeeRepository()
+
+    dto = EmployeeDTO.from_dict(request.form)
+    employee = repository.find(dto.employee_id)
+    employee.edit(dto)
+
+    repository.store(employee)
+    return redirect(f'/employee/employee_id={employee.employee_id}', code=302)
 
 
-@app.route('/employee/delete/employee_id=<int:employee_id>', methods=['GET', 'DELETE'])
+@app.route('/employee/delete/employee_id=<int:employee_id>')
 def delete_employee(employee_id: int):
-    service = EmployeeService(EmployeeDBProvider())
-    emp = service.get_employee(employee_id)
-    service.delete_employee(emp.employee_id)
-    return redirect(f'/department/department_id={emp.department_id}', code=302)
+    repository = EmployeeRepository()
+    employee = repository.find(employee_id)
+    repository.remove_by_ids([employee_id])
+    return redirect(f'/department/department_id={employee.department_id}', code=302)
 
 
 @app.route('/')
