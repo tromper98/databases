@@ -1,8 +1,8 @@
 FROM python:3.9
 
-WORKDIR /src
+WORKDIR /app
 
-COPY ./requirements.txt /src
+COPY ./requirements.txt /app
 RUN apt install wget ca-certificates; \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -; \
     sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'; \

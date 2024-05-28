@@ -6,6 +6,32 @@ PARENT_DIR=$(dirname "$(readlink -f "$0")")
 export PROJECT_DIR=$(dirname "$PARENT_DIR")
 export USER_ID=$(id -u)
 
-DOCKER_COMPOSE_OPTS=(-f "$PROJECT_DIR/docker/tests/docker-compose.yml")
+tests_docker_compose() {
+  docker-compose --project-directory "$PROJECT_DIR" --project-name app-tests -f $PROJECT_DIR/docker/tests/docker-compose.yml "$@"
+}
 
-(cd "$PROJECT_DIR" && docker-compose "${DOCKER_COMPOSE_OPTS[@]}" "up" "-d" "--build")
+init_db() {
+    sleep 1
+    docker cp "$PROJECT_DIR"/deployment/create_tables.sql tests-postgres-db:/
+    docker exec tests-postgres-db psql -f create_tables.sql -U admin -d postgres > /dev/null
+
+    # remove migration in container
+    docker exec tests-postgres-db rm create_tables.sql
+}
+
+pushd "$PROJECT_DIR/docker/tests"
+
+# Remove old containers
+tests_docker_compose down
+
+# Start databases and run migrations
+tests_docker_compose up -d tests-postgres-db
+init_db
+
+# Run tests
+tests_docker_compose up --abort-on-container-exit --exit-code-from tests-app tests-app
+
+# Remove old containers
+tests_docker_compose down
+
+popd

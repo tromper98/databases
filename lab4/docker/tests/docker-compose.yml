@@ -1,10 +1,9 @@
 version: '3.9'
 
 services:
-
-  postgres-db:
+  tests-postgres-db:
     image: postgres:16.2
-    container_name: postgres-db-test
+    container_name: tests-postgres-db
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: 12345
@@ -14,20 +13,21 @@ services:
     ports:
       - '127.0.0.1:54329:54329'
 
-  flask:
-    build: ./flask-app-test
-    container_name: flask-app-test
+  tests-app:
+    build: docker/tests/tests-app
+    container_name: tests-app
+    working_dir: "/app"
     environment:
       - FLASK_ENV=development
-    restart: on-failure
-    env_file:
-      - ./flask-app-test/.env
     volumes:
-      - './src:/src'
-    ports:
-      - '127.0.0.1:5000:5000'
-    command: tail -F anything
+      - './src:/app/src'
+      - './tests:/app/tests'
+    command:
+      - python
+      - '-m'
+      - pytest
+      - '-v'
+      - 'tests/integration'
 
 volumes:
   postgres-db-data:
-  pgadmin-data:
