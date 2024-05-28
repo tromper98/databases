@@ -7,11 +7,11 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: 12345
-      POSTGRES_DB: postgres-test
+      POSTGRES_DB: postgres
     volumes:
       - 'postgres-db-data:/var/lib/psql'
     ports:
-      - '127.0.0.1:54329:54329'
+      - '127.0.0.1:5432:5432'
 
   tests-app:
     build: docker/tests/tests-app
@@ -19,6 +19,8 @@ services:
     working_dir: "/app"
     environment:
       - FLASK_ENV=development
+    env_file:
+      - docker/tests/tests-app/.env
     volumes:
       - './src:/app/src'
       - './tests:/app/tests'

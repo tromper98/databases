@@ -18,8 +18,8 @@ CREATE TABLE department (
 CREATE TABLE employee (
     employee_id SERIAL PRIMARY KEY,
     first_name VARCHAR(256) NOT NULL,
-    last_name VARCHAR(256),
-    middle_name VARCHAR(256) NOT NULL,
+    last_name VARCHAR(256) NOT NULL,
+    middle_name VARCHAR(256),
     birth_date TIMESTAMP,
     sex CHAR(1),
     phone VARCHAR(11) NOT NULL,
@@ -63,3 +63,12 @@ CREATE TRIGGER department_updated_at
   FOR EACH ROW
   EXECUTE PROCEDURE update_timestamp();
 
+INSERT INTO job_title
+(name)
+VALUES
+    ('Менеджер'),
+    ('Директор'),
+    ('Бухгалтер'),
+    ('Продавец'),
+    ('Рабочий')
+;

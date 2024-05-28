@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 from typing import Optional
-from dataclasses import dataclass
 from datetime import date
 
 from src.app.common.transfer.employeedto import EmployeeDTO
 
 
-@dataclass
 class Employee:
     employee_id: Optional[int]
     first_name: str
@@ -18,14 +16,25 @@ class Employee:
     phone: Optional[str]
     sex: str
     hire_date: date
-    job_title_id: int
+    job_title_id: Optional[int]
     department_id: int
     note: Optional[str]
     image_path: Optional[str]
 
-    def __init__(self, first_name: str, last_name: str, middle_name: str, birth_date: date, email: str,
-                 phone: str, sex: str, hire_date: date, job_title_id: int, department_id: int, note: Optional[str] = None,
-                 image_path: str = None, employee_id: Optional[int] = None):
+    def __init__(self,
+                 first_name: str,
+                 last_name: str,
+                 email: str,
+                 phone: str,
+                 middle_name: Optional[str] = None,
+                 birth_date: Optional[date] = None,
+                 sex: Optional[str] = None,
+                 hire_date: Optional[date] = None,
+                 job_title_id: Optional[int] = None,
+                 department_id: Optional[int] = None,
+                 note: Optional[str] = None,
+                 image_path: str = None,
+                 employee_id: Optional[int] = None):
         self.first_name = first_name
         self.last_name = last_name
         self.middle_name = middle_name

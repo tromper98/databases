@@ -25,10 +25,3 @@ class Department(object):
         self.city = department_dto.city
         self.street = department_dto.street
         self.house = department_dto.house
-
-    def to_dict(self) -> Dict:
-        return dict(
-            city=self.city,
-            street=self.street,
-            house=self.house
-        )

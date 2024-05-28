@@ -1,13 +1,3 @@
-INSERT INTO job_title
-(name)
-VALUES
-    ('Менеджер'),
-    ('Директор'),
-    ('Бухгалтер'),
-    ('Продавец'),
-    ('Рабочий')
-;
-
 INSERT INTO department
 (city, street, house)
 VALUES
