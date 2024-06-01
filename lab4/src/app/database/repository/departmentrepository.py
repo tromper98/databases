@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Optional
 
 from pyodbc import Row
 
@@ -12,7 +12,7 @@ class DepartmentRepository:
     def __init__(self) -> None:
         self._conn = DbConnection(os.environ.get('POSTGRES_CONN_STR'))
 
-    def find(self, department_id: int) -> Department:
+    def find(self, department_id: int) -> Optional[Department]:
         sql = """
             SELECT
                 department_id,
@@ -24,9 +24,11 @@ class DepartmentRepository:
         """
         params = (department_id,)
         result = self._conn.select(sql, params)
+        if len(result) == 0:
+            return None
         return self._create_department(result[0])
 
-    def find_all(self) -> List[Department]:
+    def find_all(self) -> Optional[List[Department]]:
         sql = """
             SELECT
                 department_id,
@@ -36,6 +38,8 @@ class DepartmentRepository:
             FROM department
         """
         result = self._conn.select(sql)
+        if len(result) == 0:
+            return None
         return [self._create_department(row) for row in result]
 
     def get_employee_count(self, department_id: int) -> int:

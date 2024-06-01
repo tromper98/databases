@@ -16,7 +16,7 @@ class EmployeeDTO:
     sex: str
     hire_date: date
     job_title_id: int
-    department_id: int
+    department_id: Optional[int]
     note: str
     image_path: Optional[str]
 

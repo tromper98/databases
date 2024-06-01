@@ -29,7 +29,7 @@ tests_docker_compose up -d tests-postgres-db
 init_db
 
 # Run tests
-tests_docker_compose up --abort-on-container-exit --exit-code-from tests-app --build tests-app
+tests_docker_compose up --abort-on-container-exit --exit-code-from tests-app tests-app
 
 # Remove old containers
 tests_docker_compose down

@@ -38,6 +38,11 @@ class DbConnection:
             cursor.execute(sql, params)
             return cursor.rowcount
 
+    def execute(self, sql: str) -> None:
+        with self.connect_to_db():
+            cursor = self._connection.cursor()
+            cursor.execute(sql)
+
     @contextmanager
     def connect_to_db(self):
         self._connection = pyodbc.connect(self._conn_str, autocommit=True)
