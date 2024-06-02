@@ -2,7 +2,6 @@ import pytest
 import os
 import sys
 
-
 from datetime import date
 
 # Именовать как константы
@@ -11,7 +10,7 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 APP_DIR = os.path.join(PROJECT_DIR, 'src')
 sys.path.append(APP_DIR)
 
-
+from src.routes import app
 from src.app.common.dbconnection import DbConnection
 from src.app.common.transfer.departmentdto import DepartmentDTO
 from src.app.common.transfer.employeedto import EmployeeDTO
@@ -148,7 +147,6 @@ def test_department_operations():
 
 @pytest.mark.usefixtures('truncate_tables_after_test')
 def test_employee_operations():
-
     # Test create employee
     employee_repository = EmployeeRepository()
     emp = Employee(first_name='f_name',
@@ -195,3 +193,176 @@ def test_employee_operations():
     employee_repository.remove_by_ids([stored_emp.employee_id])
 
     assert employee_repository.find(1) is None
+
+
+@pytest.mark.usefixtures('truncate_tables_after_test')
+def test_department_requests():
+    # Test create department from
+    form_data = dict(
+        city='city_1',
+        street='street_1',
+        house='house_1'
+    )
+    test_client = app.test_client()
+    test_client.post('/department/create', data=form_data)
+
+    # Test get department by id
+    response = test_client.get('/department/department_id=1')
+    html_content = response.data.decode('utf-8')
+
+    assert response.status_code == 200
+    assert form_data['city'] in html_content
+    assert form_data['street'] in html_content
+    assert form_data['house'] in html_content
+
+    # Test delete department
+
+    test_client.get('/department/delete/department_id=1')
+
+    try:
+        test_client.get('/department/department_id=1')
+    except ValueError:
+        assert True
+    except:
+        assert False
+
+
+@pytest.mark.usefixtures('truncate_tables_after_test')
+def test_employees_requests():
+    test_client = app.test_client()
+    # Create department
+    department_data = dict(
+        city='city_1',
+        street='street_1',
+        house='1'
+    )
+    test_client.post('/department/create', data=department_data)
+
+    # Test create employee
+    form_data = dict(
+        first_name='f_name',
+        last_name='l_name',
+        middle_name='m_name',
+        birth_date='2020-01-01',
+        sex='F',
+        hire_date='2024-01-01',
+        job_title_id='1',
+        phone='89001112233',
+        email='example@mail.com',
+        note='aaaaaaa',
+        department_id='1'
+    )
+
+    test_client.post('/employee/create', data=form_data)
+
+    # Test get employee
+    response = test_client.get('/employee/employee_id=1')
+    html_content = response.data.decode('utf-8')
+
+    assert response.status_code == 200
+    for k in form_data.keys():
+        assert form_data[k] in html_content
+
+    # Test delete employee
+    test_client.get('/employee/delete/employee_id=1')
+
+    try:
+        test_client.get('/employee/employee_id=1')
+    except ValueError:
+        assert True
+    except:
+        assert False
+
+
+@pytest.mark.usefixtures('truncate_tables_after_test')
+def test_sql_injection_on_update_department():
+    test_client = app.test_client()
+    form_data = dict(
+        city='city_1',
+        street='street_1',
+        house='1'
+    )
+
+    test_client.post('/department/create', data=form_data)
+
+    response = test_client.get('/department/department_id=1')
+    html_content = response.data.decode('utf-8')
+
+    assert response.status_code == 200
+    for k in form_data.keys():
+        assert form_data[k] in html_content
+
+    injection_data = dict(
+        department_id='1',
+        city='city_1',
+        street='street_1',
+        house='1; DELETE FROM department'
+    )
+    test_client.post('/department/update', data=injection_data)
+
+    response = test_client.get('/department/department_id=1')
+    html_content = response.data.decode('utf-8')
+
+    assert response.status_code == 200
+    for k in form_data.keys():
+        assert form_data[k] in html_content
+
+
+@pytest.mark.usefixtures('truncate_tables_after_test')
+def test_sql_injection_on_update_employee():
+    test_client = app.test_client()
+    # Create department
+    department_data = dict(
+        city='city_1',
+        street='street_1',
+        house='1'
+    )
+    test_client.post('/department/create', data=department_data)
+
+    # Test create employee
+    form_data = dict(
+        first_name='f_name',
+        last_name='l_name',
+        middle_name='m_name',
+        birth_date='2020-01-01',
+        sex='F',
+        hire_date='2024-01-01',
+        job_title_id='1',
+        phone='89001112233',
+        email='example@mail.com',
+        note='aaaaaaa',
+        department_id='1'
+    )
+
+    test_client.post('/employee/create', data=form_data)
+
+    response = test_client.get('/employee/employee_id=1')
+    html_content = response.data.decode('utf-8')
+
+    assert response.status_code == 200
+    for k in form_data.keys():
+        assert form_data[k] in html_content
+
+    injection_data = dict(
+        employee_id='1',
+        first_name='f_name',
+        last_name='l_name',
+        middle_name='m_name',
+        birth_date='2020-01-01',
+        sex='F',
+        hire_date='2024-01-01',
+        job_title_id='1',
+        phone='89001112233',
+        email='example@mail.com',
+        note="aaaaaaa'; DELETE FROM employee",
+        department_id='1'
+    )
+
+    test_client.post('employee/update', data=injection_data)
+
+    response = test_client.get('/employee/employee_id=1')
+    html_content = response.data.decode('utf-8')
+
+    assert response.status_code == 200
+    for k in form_data.keys():
+        assert form_data[k] in html_content

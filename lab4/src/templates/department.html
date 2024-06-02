@@ -25,17 +25,19 @@
         <div class="employees-list">
             Сотрудники филиала
         </div>
-        <div class="employees">
-            {% for employee in employees %}
-            <div class="employee-item">
-                <div class="employee-item-name">{{ employee.last_name ~ ' ' ~ employee.first_name ~ ' ' ~ employee.middle_name }}</div>
-                <div class="employee-item-edit"><a href="/employee/employee_id={{ employee.employee_id }}">Edit</a></div>
-                <div class="employee-item-delete">
-                    <a href="/employee/delete/employee_id={{ employee.employee_id}}">Remove</a>
-                </div>
-            </div>
-            {% endfor %}
 
+        <div class="employees">
+            {% if employees is not none %}
+                {% for employee in employees %}
+                <div class="employee-item">
+                    <div class="employee-item-name">{{ employee.last_name ~ ' ' ~ employee.first_name ~ ' ' ~ employee.middle_name }}</div>
+                    <div class="employee-item-edit"><a href="/employee/employee_id={{ employee.employee_id }}">Edit</a></div>
+                    <div class="employee-item-delete">
+                        <a href="/employee/delete/employee_id={{ employee.employee_id}}">Remove</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
             <div class="employee-item">
                 <form class="new-employee" action="/employee/new" method="GET">
                     <input type="hidden" name="department_id" value="{{ department.department_id }}">

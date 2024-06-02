@@ -19,14 +19,15 @@ def get_all_department():
     departments = repository.find_all()
 
     dto_list = []
-    for department in departments:
-        dto_list.append(DepartmentDTO(
-            department_id=department.department_id,
-            city=department.city,
-            street=department.street,
-            house=department.house,
-            employee_count=repository.get_employee_count(department.department_id)
-        ))
+    if departments:
+        for department in departments:
+            dto_list.append(DepartmentDTO(
+                department_id=department.department_id,
+                city=department.city,
+                street=department.street,
+                house=department.house,
+                employee_count=repository.get_employee_count(department.department_id)
+            ))
 
     context = dict(
         departments=dto_list
@@ -40,6 +41,8 @@ def get_department_by_id(department_id: int):
     employee_repository = EmployeeRepository()
 
     department = department_repository.find(department_id)
+    if not department:
+        raise ValueError(f'Department with department_id={department_id} not found')
     employees = employee_repository.find_by_department_id(department.department_id)
 
     context = dict(
@@ -70,6 +73,8 @@ def update_department():
     dto = DepartmentDTO.from_dict(request.form)
     repository = DepartmentRepository()
     department = repository.find(dto.department_id)
+    if not department:
+        raise ValueError(f'Department with department_id={dto.department_id} not found')
     department.edit(dto)
     repository.store(department)
     return redirect(f'/department/department_id={department.department_id}', code=302)
@@ -89,6 +94,8 @@ def get_employee_by_id(employee_id: int):
     job_title_provider = JobTitleDBProvider()
 
     employee = employee_repository.find(employee_id)
+    if not employee:
+        raise ValueError(f'Employee with employee_id={employee_id} not found')
 
     context = dict(
         navbar_employee=employee,
@@ -130,6 +137,8 @@ def update_employee():
 
     dto = EmployeeDTO.from_dict(request.form)
     employee = repository.find(dto.employee_id)
+    if not employee:
+        raise ValueError(f'Employee with employee_id={dto.employee_id} not found')
     employee.edit(dto)
 
     repository.store(employee)
