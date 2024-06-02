@@ -107,6 +107,9 @@ class EmployeeRepository:
         params = tuple(employee_ids)
         self._conn.delete(sql, params)
 
+    def save_employee_image(self, file) -> None:
+        file.save()
+
     @staticmethod
     def _create_employee(row: Row) -> Employee:
         return Employee(

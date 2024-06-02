@@ -13,7 +13,7 @@
     grid-column-end: 5;
 }
 
-.avatar {
+.photo {
     grid-column-start: 3;
     grid-column-end: 5;
     grid-row-start: 1;

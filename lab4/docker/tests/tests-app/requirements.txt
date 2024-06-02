@@ -3,3 +3,4 @@ flask_testing==0.8.1
 blinker==1.8.2
 pyodbc==5.1.0
 pytest==6.2.5
+Pillow==9.0.1

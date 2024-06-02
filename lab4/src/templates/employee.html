@@ -12,7 +12,7 @@
             Личные данные
         </div>
 
-        <form class="employee-attributes" action="/employee/update" method="POST">
+        <form class="employee-attributes" action="/employee/update" enctype=multipart/form-data method="POST">
             <div class="personal-data">
                 <input type="hidden" id="employee_id" name="employee_id" value="{{ employee.employee_id }}">
 
@@ -40,9 +40,13 @@
                     <input type="radio" id="radio-w" name="sex" value="F" {{ 'checked' if employee.sex == 'F' }}>
                 </div>
 
-                <div class="avatar">
-                    <label for="avatar">Загрузить фотографию</label>
-                    <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
+                <div class="photo">
+                    {% if employee.image_path is not none %}
+                        <img class="photo" id="photo" name="photo" src="{{ url_for('upload_file', filename=employee.image_path) }}" alt="Фото сотрудника">
+                    {% else %}
+                        <label for="photo">Загрузить фотографию</label>
+                        <input type="file" id="photo" name="photo" accept="image/webp, image/jpeg">
+                    {% endif %}
                 </div>
             </div>
 

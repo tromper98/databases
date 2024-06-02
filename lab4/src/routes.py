@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, send_from_directory
 
-
+from src.app.common.filehandler import FileHandler
 from src.app.common.transfer.employeedto import EmployeeDTO
 from src.app.common.transfer.departmentdto import DepartmentDTO
 
@@ -125,8 +125,15 @@ def new_employee():
 @app.route('/employee/create', methods=['POST'])
 def create_employee():
     dto = EmployeeDTO.from_dict(request.form)
+    if 'photo' in request.files:
+        file = request.files['photo']
+        file_handler = FileHandler(app.config['UPLOAD_FOLDER'])
+        if file_handler.try_save_file(file):
+            dto.image_path = file.filename
+
     employee = Employee.from_dto(dto)
     repository = EmployeeRepository()
+
     repository.store(employee)
     return redirect(f'/department/department_id={employee.department_id}', code=302)
 
@@ -136,6 +143,12 @@ def update_employee():
     repository = EmployeeRepository()
 
     dto = EmployeeDTO.from_dict(request.form)
+    if 'photo' in request.files:
+        file = request.files['photo']
+        file_handler = FileHandler(app.config['UPLOAD_FOLDER'])
+        if file_handler.try_save_file(file):
+            dto.image_path = file.filename
+
     employee = repository.find(dto.employee_id)
     if not employee:
         raise ValueError(f'Employee with employee_id={dto.employee_id} not found')
@@ -156,3 +169,8 @@ def delete_employee(employee_id: int):
 @app.route('/')
 def redirect_to_department_list():
     return redirect(f'/department/all', code=302)
+
+
+@app.route('/public/uploads/<path:filename>')
+def upload_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
